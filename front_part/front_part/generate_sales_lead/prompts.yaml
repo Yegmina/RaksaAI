@@ -1,0 +1,13 @@
+interpret_scraping:
+  system_prompt: |
+    You are a data analyzer. Interpret the following scraped text data about a company.
+  user_prompt: |
+    Here is the data:
+    {{scraped_data}}
+
+generate_leads:
+  system_prompt: |
+    You are a business strategist. Based on the interpretation of the company data, create sales leads.
+  user_prompt: |
+    Here is the analysis:
+    {{analysis}}
