@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Filter Tool</title>
+</head>
+<body>
+    <h1>CSV Filter Tool</h1>
+    <div>
+        <h3>Step 1: Choose Filter Method</h3>
+        <label for="filter-method">Choose a method:</label>
+        <select id="filter-method">
+            <option value="dropdown">Select from Dropdown</option>
+            <option value="upload">Upload Filter List</option>
+        </select>
+
+        <div id="dropdown-container">
+            <h4>Select Industries:</h4>
+            <select id="dropdown" multiple size="6">
+                <option>Manufacture of electronic components</option>
+                <option>Manufacture of electric domestic appliances</option>
+                <option>Manufacture of electric lighting equipment</option>
+                <option>Manufacture of consumer electronics</option>
+                <option>Manufacture of communication equipment</option>
+                <option>Manufacture of electricity distribution</option>
+            </select>
+        </div>
+
+        <div id="upload-container" style="display: none;">
+            <h4>Upload Filter List File:</h4>
+            <input type="file" id="filter-file" accept=".txt">
+        </div>
+    </div>
+
+    <div>
+        <h3>Step 2: Upload Companies CSV File (or skip to use all Finnish companies)</h3>
+        <input type="file" id="csv-file" accept=".csv">
+    </div>
+
+    <div>
+        <h3>Step 3: Start Filtering</h3>
+        <button id="filter-button">Filter and Download</button>
+    </div>
+
+    <a id="download-link" style="display:none;">Download Filtered CSV</a>
+
+    <script src="main.js" defer></script>
+</body>
+</html>
