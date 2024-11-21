@@ -20,11 +20,13 @@ def serve_static_files(filename):
 def process_data():
     try:
         data = request.json
+        print(f"DEBUG: Received data: {data}")  # Log input data from frontend
+
         prompts = load_prompts("prompts.yaml")
         gemini_model = GeminiModel(model_name="gemini-1.5-flash")
 
         def generate_responses():
-            yield '{"status": "success", "results": ['
+            yield '{"status": "success", "results": ['  # Initial JSON structure
             first = True
             for company_name, company_info in data.items():
                 if not first:
@@ -38,25 +40,31 @@ def process_data():
                 Industry: {company_info.get('mainBusinessLine', 'N/A')}
                 Website: {company_info.get('url', 'N/A')}
                 """
-                pages = company_info.get("pages", [])
-                if pages:
-                    scraped_data += "\nPages:\n"
-                    for page in pages:
-                        scraped_data += f"- {page['page_url']}: {page['content'][:100]}...\n"
-
+                print(f"DEBUG: Processing {company_name}")  # Debug log for company processing
+                
                 analysis, sales_leads = process_company(scraped_data, gemini_model, prompts)
                 result = {
                     "company_name": company_name,
                     "analysis": analysis,
                     "sales_leads": sales_leads
                 }
-                yield json.dumps(result)
+                
+                json_chunk = json.dumps(result)
+                print(f"DEBUG: Sending chunk: {json_chunk}")  # Debug log for JSON chunk
+                yield json_chunk
             yield ']}'
 
-        return Response(stream_with_context(generate_responses()), content_type="application/json")
 
+        response = Response(stream_with_context(generate_responses()), content_type="application/x-ndjson")
+        print("DEBUG: Response streaming started")  # Log when streaming starts
+        print(f"DEBUG: Response headers: {response.headers}")
+
+        return response
+        
     except Exception as e:
+        print(f"ERROR: {str(e)}")  # Log any exceptions
         return jsonify({"status": "error", "message": str(e)})
+
 
 def load_prompts(prompt_file="prompts.yaml"):
     with open(prompt_file, 'r', encoding='utf-8') as file:
